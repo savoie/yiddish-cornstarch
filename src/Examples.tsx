@@ -22,10 +22,15 @@ function ParseExample(ex: IExample): Snippet.ISnippetProps {
   return {
     blocks,
     lang: ex.lang,
+    locked: false
   };
 }
 
 function GetExample(name: string) {
+  return ParseExample(Registry[name]);
+}
+
+function GetSolution(name: string) {
   return ParseExample(Registry[name]);
 }
 
@@ -47,10 +52,21 @@ class Example extends React.Component<RouteComponentProps<IMatchParams>, IExampl
   public render() {
     const name = this.props.match.params.name;
     if (name in Registry) {
+      const question = GetExample(name);
+      if (this.state.submitted) {
+        return (
+          <div>
+            <h1>Submitted page</h1>
+            <Snippet.Snippet {...question} locked={true}/>
+            <Snippet.Snippet {...GetSolution(name)} locked={true} />
+          </div>
+        );
+      }
+
       return (
         <div>
           <h1>Find the lines that should be changed/fixed</h1>
-          <Snippet.Snippet {...GetExample(name)} />
+          <Snippet.Snippet {...question} />
           <button onClick={this.submit}>Submit</button>
         </div>
       );

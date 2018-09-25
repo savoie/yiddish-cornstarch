@@ -20,6 +20,7 @@ interface IBlock {
 interface ISnippetProps {
   blocks: IBlock[];
   lang: string;
+  locked: boolean;
 }
 
 class Snippet extends React.Component<ISnippetProps, {}> {
@@ -31,7 +32,7 @@ class Snippet extends React.Component<ISnippetProps, {}> {
   public render() {
     const children = [];
     for (let i = 0; i < this.props.blocks.length; i++) {
-      children.push(<Block.Block key={i} {...this.props.blocks[i]} language={this.props.lang}/>);
+      children.push(<Block.Block key={i} {...this.props.blocks[i]} language={this.props.lang} locked={this.props.locked} />);
     }
     return (
       <pre className={"language-" + this.props.lang}>

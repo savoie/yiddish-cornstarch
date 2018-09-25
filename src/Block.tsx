@@ -4,6 +4,7 @@ interface IBlockProps {
   code: string;
   good: boolean;
   language: string;
+  locked: boolean;
 }
 
 enum Highlight {
@@ -28,16 +29,27 @@ class Block extends React.Component<IBlockProps, IBlockState> {
 
   public render() {
     const langclass = "language-" + this.props.language;
-    const classes = langclass + " block " + highlightCssClass(this.state.hl);
-    return (<code className={classes} onClick={this.click}>
+    const classes = [
+      langclass,
+      "block",
+      highlightCssClass(this.state.hl)
+    ]
+
+    if (this.props.locked) {
+      classes.push("locked");
+    }
+
+    return (<code className={classes.join(" ")} onClick={this.click}>
       {this.props.code}
     </code>);
   }
 
   private click = (e: any) => {
-    this.setState((state: IBlockState, props: IBlockProps) => ({
-      hl: state.hl !== Highlight.None ? state.hl : (props.good ? Highlight.Good : Highlight.Bad),
-    }));
+    if (!this.props.locked) {
+      this.setState((state: IBlockState, props: IBlockProps) => ({
+        hl: state.hl !== Highlight.None ? state.hl : (props.good ? Highlight.Good : Highlight.Bad),
+      }));
+    }
   }
 }
 
