@@ -33,9 +33,15 @@ interface IMatchParams {
   name: string;
 }
 
-class Example extends React.Component<RouteComponentProps<IMatchParams>, {}> {
+interface IExampleState {
+  submitted: boolean;
+}
+
+class Example extends React.Component<RouteComponentProps<IMatchParams>, IExampleState> {
   constructor(props: RouteComponentProps<IMatchParams>) {
     super(props);
+    this.state = {submitted: false};
+    this.submit = this.submit.bind(this);
   }
 
   public render() {
@@ -45,6 +51,7 @@ class Example extends React.Component<RouteComponentProps<IMatchParams>, {}> {
         <div>
           <h1>Find the lines that should be changed/fixed</h1>
           <Snippet.Snippet {...GetExample(name)} />
+          <button onClick={this.submit}>Submit</button>
         </div>
       );
     } else {
@@ -56,6 +63,12 @@ class Example extends React.Component<RouteComponentProps<IMatchParams>, {}> {
         </div>
       );
     }
+  }
+
+  private submit = (e: any) => {
+    this.setState((state: IExampleState) => ({
+      submitted: true
+    }));
   }
 }
 
