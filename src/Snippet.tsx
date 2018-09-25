@@ -10,8 +10,6 @@ import './snippet.css';
 
 import * as Block from './Block'
 
-Prism.highlightAll();
-
 interface IBlock {
   code: string;
   good: boolean;
@@ -39,6 +37,10 @@ class Snippet extends React.Component<ISnippetProps, {}> {
         {children}
       </pre>
     );
+  }
+
+  public componentDidMount() {
+    Prism.highlightAll();
   }
 }
 
